@@ -13,7 +13,7 @@ The script assumes that the unzipped data folder is placed in the working direct
  
  - name_activities (): replaces numeric identifies with descriptive activity factors.
  
- - merge_train_test(): merges both training and test data sets
+ - merge\_train\_test(): merges both training and test data sets
  
 ### The script then tidies up the merged data set:
 
