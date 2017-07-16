@@ -52,11 +52,6 @@ merge_train_test <- function() {
     arrange(combined_data, Subject, Activity)
 }
 
-replaceNA <- function(x) {
-    # Takes dataset and replaces NA's in "Coordinate" column with ""
-    x$Coordinate[is.na(x$Coordinate)] <- ""
-}
-
 # Creates from combined data set a separate data set with the average of each variable for each activity and each subject.
 summarized_data <- merge_train_test() %>%
     group_by(Subject, Activity) %>%
