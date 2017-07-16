@@ -63,10 +63,12 @@ summarized_data <- merge_train_test() %>%
     summarise_all(mean) 
 
 # Tidies data
-tidy_data <- summarized_data %>%
+tidy_data_1 <- summarized_data %>%
     gather(Feature_Statistic_Coordinate, Signal, -(Subject:Activity)) %>%
-    separate(Feature_Statistic_Coordinate, c("Feature", "Statistic", "Coordinate"), sep = "_", fill = "right") %>%
-    replace_na(list(NA, NA, NA, NA, "", NA)) %>%
+    separate(Feature_Statistic_Coordinate, c("Feature", "Statistic", "Coordinate"), sep = "_", fill = "right") 
+tidy_data_1$Coordinate[is.na(tidy_data_1$Coordinate)] <- ""
+tidy_data <- tidy_data_1 %>%
+    replace_na(list(rep("", 6))) %>%
     unite(Features, c(Feature, Coordinate), sep = "_") %>%
     spread(Features, Signal)
-    
+
