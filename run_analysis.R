@@ -1,4 +1,5 @@
 library(dplyr)
+library(tidyr)
 
 # Cleans the UCI HAR Dataset from http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones
 # Merges the training and the test sets to create one data set.
@@ -51,7 +52,21 @@ merge_train_test <- function() {
     arrange(combined_data, Subject, Activity)
 }
 
-# Creates from combined data set a tidy data set with the average of each variable for each activity and each subject.
-tidy_data <- merge_train_test() %>%
+replaceNA <- function(x) {
+    # Takes dataset and replaces NA's in "Coordinate" column with ""
+    x$Coordinate[is.na(x$Coordinate)] <- ""
+}
+
+# Creates from combined data set a separate data set with the average of each variable for each activity and each subject.
+summarized_data <- merge_train_test() %>%
     group_by(Subject, Activity) %>%
     summarise_all(mean) 
+
+# Tidies data
+tidy_data <- summarized_data %>%
+    gather(Feature_Statistic_Coordinate, Signal, -(Subject:Activity)) %>%
+    separate(Feature_Statistic_Coordinate, c("Feature", "Statistic", "Coordinate"), sep = "_", fill = "right") %>%
+    replace_na(list(NA, NA, NA, NA, "", NA)) %>%
+    unite(Features, c(Feature, Coordinate), sep = "_") %>%
+    spread(Features, Signal)
+    
