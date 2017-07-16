@@ -67,3 +67,4 @@ tidy_data <- tidy_data_1 %>%
     unite(Features, c(Feature, Coordinate), sep = "_") %>%
     spread(Features, Signal)
 
+write.table(tidy_data, file= "./Samsung_tidy.txt", row.names = FALSE)
